@@ -21,4 +21,9 @@ export default class Users {
     }
     return JSON.stringify(this.users);
   }
+
+  getUser(userId: string): string | undefined {
+    const user = this.users.find((user) => user.id === userId);
+    return user ? JSON.stringify(user) : undefined;
+  }
 }
