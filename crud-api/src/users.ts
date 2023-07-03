@@ -29,9 +29,7 @@ export default class Users {
   }
 
   addUser(user: User): string | undefined {
-    const isHobbyArrayOfStrings = user.hobbies.every((hobby) => typeof hobby === 'string');
-
-    if (!user.username || typeof user.username !== 'string' || !user.age || typeof user.age !== 'number' || user.age < 0 || !user.hobbies || !Array.isArray(user.hobbies) || !isHobbyArrayOfStrings) {
+    if (!this.checkUserInfo(user)) {
       return undefined;
     }
 
@@ -41,8 +39,43 @@ export default class Users {
       age: user.age,
       hobbies: user.hobbies,
     };
-    
+
     this.users.push(newUser);
     return JSON.stringify(newUser);
+  }
+
+  private checkUserInfo(user: User): boolean {
+    const isHobbyArrayOfStrings = user.hobbies.every(
+      (hobby) => typeof hobby === 'string'
+    );
+
+    if (
+      !user.username ||
+      typeof user.username !== 'string' ||
+      !user.age ||
+      typeof user.age !== 'number' ||
+      user.age < 0 ||
+      !user.hobbies ||
+      !Array.isArray(user.hobbies) ||
+      !isHobbyArrayOfStrings
+    ) {
+      return false;
+    }
+    return true;
+  }
+
+  updateUser(userId: string, user: User): string | undefined {
+    if (!this.checkUserInfo(user)) {
+      return undefined;
+    }
+
+    const userIndex = this.users.findIndex((user) => user.id === userId);
+    if (userIndex === -1) {
+      return undefined;
+    }
+
+    this.users[userIndex] = user;
+    this.users[userIndex].id = userId;
+    return JSON.stringify(user);
   }
 }

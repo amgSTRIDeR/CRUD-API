@@ -36,7 +36,7 @@ const server = http.createServer((req, res) => {
               sendResponse(
                 res,
                 404,
-                getStringifyMessage('parameter should be uuid')
+                getStringifyMessage('userId is invalid (not uuid)')
               );
             }
           }
@@ -58,9 +58,19 @@ const server = http.createServer((req, res) => {
             req.on('end', () => {
               try {
                 const newUser = users.addUser(JSON.parse(body));
-                newUser ? sendResponse(res, 201, newUser) : sendResponse(res, 400, getStringifyMessage('user information is not valid'));
+                newUser
+                  ? sendResponse(res, 201, newUser)
+                  : sendResponse(
+                      res,
+                      400,
+                      getStringifyMessage('user information is not valid')
+                    );
               } catch (error) {
-                sendResponse(res, 400, getStringifyMessage('user information is not valid'));
+                sendResponse(
+                  res,
+                  400,
+                  getStringifyMessage('user information is not valid')
+                );
               }
             });
           } else {
@@ -69,6 +79,64 @@ const server = http.createServer((req, res) => {
           break;
       }
       break;
+    case 'PUT':
+      switch (urlArray[1]) {
+        case 'users':
+          if (urlArray[2]) {
+            const userId = urlArray[2];
+            if (isUuid(userId)) {
+              let body = '';
+
+              req.on('data', (chunk) => {
+                body += chunk.toString();
+              });
+
+              req.on('end', () => {
+                try {
+                  if (users.getUser(userId) === undefined) {
+                    sendResponse(
+                      res,
+                      404,
+                      getStringifyMessage(
+                        `user with id ${userId} doesn't exist`
+                      )
+                    );
+                    return;
+                  }
+
+                  const updatedUser = users.updateUser(
+                    userId,
+                    JSON.parse(body)
+                  );
+                  updatedUser
+                    ? sendResponse(res, 200, updatedUser)
+                    : sendResponse(
+                        res,
+                        400,
+                        getStringifyMessage('user information is not valid')
+                      );
+                } catch (error) {
+                  sendResponse(
+                    res,
+                    400,
+                    getStringifyMessage('user information is not valid')
+                  );
+                }
+              });
+            } else {
+              sendResponse(
+                res,
+                404,
+                getStringifyMessage('userId is invalid (not uuid)')
+              );
+            }
+            break;
+          } else {
+            sendResponse(res, 404, undefined);
+          }
+      }
+      break;
+    
 
     default:
       sendResponse(res, 404, undefined);
