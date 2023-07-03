@@ -69,7 +69,7 @@ const server = http.createServer((req, res) => {
                 sendResponse(
                   res,
                   400,
-                  getStringifyMessage('user information is not valid')
+                  getStringifyMessage('Oops, server side error, we already know about it and will fix it soon')
                 );
               }
             });
@@ -119,7 +119,7 @@ const server = http.createServer((req, res) => {
                   sendResponse(
                     res,
                     400,
-                    getStringifyMessage('user information is not valid')
+                    getStringifyMessage('Oops, server side error, we already know about it and will fix it soon')
                   );
                 }
               });
