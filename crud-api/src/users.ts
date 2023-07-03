@@ -9,9 +9,9 @@ export default class Users {
     this.users = [
       {
         id: '3d7e8a9b-7c5c-4c3d-8d5e-6f7f6c7d8f9a',
-        username: 'strider',
-        age: 35,
-        hobbies: ['dota', 'js', 'canada'],
+        username: 'John Cena',
+        age: 45,
+        hobbies: ['WWE', 'sport', 'kittens'],
       },
     ];
   }
@@ -84,7 +84,7 @@ export default class Users {
     if (userIndex === -1) {
       return false;
     }
-    
+
     this.users.splice(userIndex, 1);
     return true;
   }
