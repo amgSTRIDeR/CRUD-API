@@ -1,5 +1,6 @@
 import getStringifyMessage from './common/getStringifyMessage';
 import User from './interfaces/users';
+import { v4 as uuidv4 } from 'uuid';
 
 export default class Users {
   private users: User[];
@@ -25,5 +26,23 @@ export default class Users {
   getUser(userId: string): string | undefined {
     const user = this.users.find((user) => user.id === userId);
     return user ? JSON.stringify(user) : undefined;
+  }
+
+  addUser(user: User): string | undefined {
+    const isHobbyArrayOfStrings = user.hobbies.every((hobby) => typeof hobby === 'string');
+
+    if (!user.username || typeof user.username !== 'string' || !user.age || typeof user.age !== 'number' || user.age < 0 || !user.hobbies || !Array.isArray(user.hobbies) || !isHobbyArrayOfStrings) {
+      return undefined;
+    }
+
+    const newUser = {
+      id: uuidv4(),
+      username: user.username,
+      age: user.age,
+      hobbies: user.hobbies,
+    };
+    
+    this.users.push(newUser);
+    return JSON.stringify(newUser);
   }
 }

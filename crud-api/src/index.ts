@@ -45,6 +45,27 @@ const server = http.createServer((req, res) => {
           sendResponse(res, 404, undefined);
       }
       break;
+    case 'POST':
+      switch (urlArray[1]) {
+        case 'users':
+          if (!urlArray[2]) {
+            let body = '';
+
+            req.on('data', (chunk) => {
+              body += chunk.toString();
+            });
+
+            req.on('end', () => {
+              const newUser = users.addUser(JSON.parse(body));
+              newUser ? sendResponse(res, 201, newUser) : sendResponse(res, 400, getStringifyMessage('user information is not valid'));
+            });
+          } else {
+            sendResponse(res, 404, undefined);
+          }
+          break;
+      }
+      break;
+
     default:
       sendResponse(res, 404, undefined);
   }
