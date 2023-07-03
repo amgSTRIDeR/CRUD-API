@@ -136,7 +136,37 @@ const server = http.createServer((req, res) => {
           }
       }
       break;
-    
+    case 'DELETE':
+      switch (urlArray[1]) {
+        case 'users':
+          if (urlArray[2]) {
+            const userId = urlArray[2];
+            if (isUuid(userId)) {
+              const isUserDeleted = users.deleteUser(userId);
+              isUserDeleted
+                ? sendResponse(
+                    res,
+                    204,
+                    getStringifyMessage(`User with id ${userId} was deleted`)
+                  )
+                : sendResponse(
+                    res,
+                    404,
+                    getStringifyMessage(`user with id ${userId} doesn't exist`)
+                  );
+            } else {
+              sendResponse(
+                res,
+                400,
+                getStringifyMessage('userId is invalid (not uuid)')
+              );
+            }
+          } else {
+            sendResponse(res, 404, undefined);
+          }
+          break;
+      }
+      break;
 
     default:
       sendResponse(res, 404, undefined);

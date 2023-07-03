@@ -78,4 +78,14 @@ export default class Users {
     this.users[userIndex].id = userId;
     return JSON.stringify(user);
   }
+
+  deleteUser(userId: string): boolean {
+    const userIndex = this.users.findIndex((user) => user.id === userId);
+    if (userIndex === -1) {
+      return false;
+    }
+    
+    this.users.splice(userIndex, 1);
+    return true;
+  }
 }
