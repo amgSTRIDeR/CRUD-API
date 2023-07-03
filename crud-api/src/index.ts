@@ -56,8 +56,12 @@ const server = http.createServer((req, res) => {
             });
 
             req.on('end', () => {
-              const newUser = users.addUser(JSON.parse(body));
-              newUser ? sendResponse(res, 201, newUser) : sendResponse(res, 400, getStringifyMessage('user information is not valid'));
+              try {
+                const newUser = users.addUser(JSON.parse(body));
+                newUser ? sendResponse(res, 201, newUser) : sendResponse(res, 400, getStringifyMessage('user information is not valid'));
+              } catch (error) {
+                sendResponse(res, 400, getStringifyMessage('user information is not valid'));
+              }
             });
           } else {
             sendResponse(res, 404, undefined);
