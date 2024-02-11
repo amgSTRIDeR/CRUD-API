@@ -1,0 +1,33 @@
+{
+  "name": "crud-api",
+  "version": "1.0.0",
+  "description": "rs_school crud-api task",
+  "main": "index.ts",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/amgSTRIDeR/CRUD-API.git"
+  },
+  "author": "amgstrider",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/amgSTRIDeR/CRUD-API/issues"
+  },
+  "homepage": "https://github.com/amgSTRIDeR/CRUD-API#readme",
+  "devDependencies": {
+    "@types/dotenv": "^8.2.0",
+    "@types/node": "^20.3.3",
+    "@types/uuid": "^9.0.2",
+    "eslint": "^8.56.0",
+    "prettier": "^3.2.5",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "cross-env": "^7.0.3",
+    "dotenv": "^16.4.2",
+    "uuid": "^9.0.0"
+  }
+}
