@@ -42,4 +42,28 @@ export default class Users {
     this.users.push(user);
     return JSON.stringify(user);
   }
+
+  public updateUser(user: User) {
+    const currentRecordingIndex = this.getUserIndex(user.id || '');
+    if (currentRecordingIndex !== -1) {
+        this.users[currentRecordingIndex] = user;
+        return JSON.stringify(user);
+    } else {
+        return '';
+    }
+  }
+
+  public deleteUser(id: string) {
+    const currentRecordingIndex = this.getUserIndex(id);
+    if (currentRecordingIndex !== -1) {
+        this.users.splice(currentRecordingIndex, 1);
+        return true;
+    } else {
+        return false;
+    }
+  }
+
+  private getUserIndex(id: string) {
+    return this.users.findIndex((el) => el.id === id);
+  }
 }
