@@ -36,4 +36,10 @@ export default class Users {
     const user = this.users.find((el) => el.id === id);
     return JSON.stringify(user) || '';
   }
+
+  public addUser(user: User) {
+    user.id = crypto.randomUUID();
+    this.users.push(user);
+    return JSON.stringify(user);
+  }
 }

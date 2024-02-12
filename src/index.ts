@@ -4,6 +4,8 @@ import crypto from 'crypto';
 import sendResponse from './utility/sendResponse';
 import checkUuid from './utility/checkUuid';
 import handleGet from './utility/handleGet';
+import handlePost from './utility/handlePost';
+import isProperUser from './utility/isProperUser';
 dotenv.config();
 
 const server = http.createServer((req, res) => {
@@ -11,7 +13,6 @@ const server = http.createServer((req, res) => {
     const urlPath = req.url || '';
     const urlPathArr = urlPath.split('/') || '';
     const userId = urlPathArr[3];
-
     if (urlPathArr[1] !== 'api' || urlPathArr[2] !== 'users' || urlPathArr[4]) {
         console.log('url false');
         return sendResponse(res);
@@ -24,11 +25,28 @@ const server = http.createServer((req, res) => {
 
     switch(method) {
         case 'GET':
-        return handleGet(res, userId);
-        break;
+            return handleGet(res, userId);
+            break;
+        case 'POST':
+            let body = '';
+            req.on('data', (chunk) => {
+                body += chunk;
+            });
+
+            req.on('end', () => {
+                try {
+                    const user = JSON.parse(body);
+                    isProperUser(user) ? handlePost(res, user) : sendResponse(res, 400, 'Wrong properties for user')
+                } catch {
+                    return sendResponse(res, 400, 'Request body is wrong')
+                }
+            })
+            // return res.end()
+
+            
     }
 
-    sendResponse(res, 200, 'ok')
+    // sendResponse(res, 200, 'ok')
 });
 
 server.listen(process.env.PORT || 4000);
