@@ -15,7 +15,7 @@ export default class Users {
         id: 'a32e059d-20af-4522-940a-5095c9744172',
         username: 'Elon Musk',
         age: 52,
-        hobbies: ['space', 'green enrgy', 'peace'],
+        hobbies: ['space', 'green energy', 'peace'],
       },
     ]
   ) {}

@@ -5,9 +5,9 @@ import sendResponse from "./sendResponse";
 const users = Users.getInstance();
 
 export default function handleGet(res: ServerResponse, userId: string) {
-    if(userId) {
-        const user = users.getUser(userId) || `User with id: ${userId} not found`;
-        return sendResponse(res, 200,user)
+    if (userId) {
+        const user = users.getUser(userId);
+        return user ? sendResponse(res, 200, user) : sendResponse(res, 404, `User with id: ${userId} doesn't exist`)
     }
 
     return sendResponse(res, 200, users.getUsers())

@@ -12,14 +12,14 @@ const server = http.createServer((req, res) => {
     const urlPathArr = urlPath.split('/') || '';
     const userId = urlPathArr[3];
 
-    if (urlPathArr[1] !== 'api' || urlPathArr[2] !== 'users') {
-        console.log('url false')
-        return sendResponse(res)
+    if (urlPathArr[1] !== 'api' || urlPathArr[2] !== 'users' || urlPathArr[4]) {
+        console.log('url false');
+        return sendResponse(res);
     }
     
-    if(userId && !checkUuid(userId) || urlPathArr[4]) {
-        console.log('user id or after user id false')
-        return sendResponse(res)
+    if(userId && !checkUuid(userId)) {
+        console.log('user id or after user id false');
+        return sendResponse(res, 400, `userID: ${userId} is invalid`);
     }
 
     switch(method) {
