@@ -6,6 +6,7 @@ import checkUuid from './utility/checkUuid';
 import handleGet from './utility/handleGet';
 import handlePost from './utility/handlePost';
 import isProperUser from './utility/isProperUser';
+import handleBody from './utility/handleBody';
 dotenv.config();
 
 const server = http.createServer((req, res) => {
@@ -25,22 +26,14 @@ const server = http.createServer((req, res) => {
 
     switch(method) {
         case 'GET':
-            return handleGet(res, userId);
+            handleGet(res, userId);
             break;
         case 'POST':
-            let body = '';
-            req.on('data', (chunk) => {
-                body += chunk;
-            });
-
-            req.on('end', () => {
-                try {
-                    const user = JSON.parse(body);
-                    isProperUser(user) ? handlePost(res, user) : sendResponse(res, 400, 'Wrong properties for user')
-                } catch {
-                    return sendResponse(res, 400, 'Request body is wrong')
-                }
-            })
+            handleBody(req, res, handlePost)
+            break;
+        case 'PUT':
+            // handleBody(req, res, handlePost)
+            break;
             // return res.end()
 
             
