@@ -4,9 +4,9 @@ import sendResponse from './utility/sendResponse';
 import checkUuid from './utility/checkUuid';
 import handleGet from './utility/handleGet';
 import handlePost from './utility/handlePost';
-import handleBody from './utility/handleBody';
 import handlePut from './utility/handlePut';
 import handleDelete from './utility/handleDelete';
+import isProperUser from './utility/isProperUser';
 dotenv.config();
 
 const server = http.createServer((req, res) => {
@@ -21,7 +21,11 @@ const server = http.createServer((req, res) => {
 
   if (userId && !checkUuid(userId)) {
     console.log('user id or after user id false');
-    return sendResponse(res, 400, `userID: ${userId} is invalid, should be in UUID format`);
+    return sendResponse(
+      res,
+      400,
+      `userID: ${userId} is invalid, should be in UUID format`
+    );
   }
 
   switch (method) {
@@ -29,10 +33,38 @@ const server = http.createServer((req, res) => {
       handleGet(res, userId);
       break;
     case 'POST':
-      handleBody(req, res, handlePost);
+      let postBody = '';
+      req.on('data', (chunk) => {
+        postBody += chunk;
+      });
+
+      req.on('end', () => {
+        try {
+          const user = JSON.parse(postBody);
+          isProperUser(user)
+            ? handlePost(res, user)
+            : sendResponse(res, 400, 'Wrong properties for user');
+        } catch {
+          sendResponse(res, 400, 'Request body is wrong');
+        }
+      });
       break;
     case 'PUT':
-      handleBody(req, res, handlePut);
+      let putBody = '';
+      req.on('data', (chunk) => {
+        putBody += chunk;
+      });
+
+      req.on('end', () => {
+        try {
+          const user = JSON.parse(putBody);
+          isProperUser(user)
+            ? handlePut(res, user, userId)
+            : sendResponse(res, 400, 'Wrong properties for user');
+        } catch {
+          sendResponse(res, 400, 'Request body is wrong');
+        }
+      });
       break;
     case 'DELETE':
       handleDelete(res, userId);

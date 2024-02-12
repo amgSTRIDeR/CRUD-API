@@ -43,10 +43,10 @@ export default class Users {
     return JSON.stringify(user);
   }
 
-  public updateUser(user: User) {
-    const currentRecordingIndex = this.getUserIndex(user.id || '');
+  public updateUser(user: User, userId: string) {
+    const currentRecordingIndex = this.getUserIndex(userId || '');
     if (currentRecordingIndex !== -1) {
-        this.users[currentRecordingIndex] = user;
+        this.users[currentRecordingIndex] = {...user, id: userId };
         return JSON.stringify(user);
     } else {
         return '';
